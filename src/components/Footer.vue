@@ -106,7 +106,7 @@ const siteUrl = computed(() => {
     transition: opacity 0.15s ease-in-out;
   }
   @media (max-width: 720px) {
-    font-size: 0.8rem;
+    font-size: 0.85rem;
 
     position: fixed;
     bottom: 0;
@@ -114,10 +114,10 @@ const siteUrl = computed(() => {
     height: auto;
     line-height: 20px;
 
-    padding: 10px 5px calc(10px + env(safe-area-inset-bottom));
+    padding: 10px 3px calc(10px + env(safe-area-inset-bottom));
 
     &.blur {
-      font-size: 0.8rem;
+      font-size: 0.85rem;
     }
   }
   @media (max-width: 480px) {
