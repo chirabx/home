@@ -107,6 +107,18 @@ const siteUrl = computed(() => {
   }
   @media (max-width: 720px) {
     font-size: 0.85rem;
+
+    height: auto;
+    line-height: 20px;
+    padding: 10px 5px;
+
+    .power {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 5px;
+    }
+
     &.blur {
       font-size: 0.85rem;
     }

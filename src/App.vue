@@ -1,6 +1,4 @@
 <template>
-  <!-- 加载 -->
-  <Loading />
   <!-- 壁纸 -->
   <Background @loadComplete="loadComplete" />
   <!-- 主界面 -->
@@ -37,7 +35,6 @@ import { helloInit, checkDays } from "@/utils/getTime.js";
 import { HamburgerButton, CloseSmall } from "@icon-park/vue-next";
 import { mainStore } from "@/store";
 import { Icon } from "@vicons/utils";
-import Loading from "@/components/Loading.vue";
 import MainLeft from "@/views/Main/Left.vue";
 import MainRight from "@/views/Main/Right.vue";
 import Background from "@/components/Background.vue";
