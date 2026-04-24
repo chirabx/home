@@ -114,7 +114,7 @@ const siteUrl = computed(() => {
     height: auto;
     line-height: 20px;
 
-    padding: 10px 3px calc(10px + env(safe-area-inset-bottom));
+    padding: 10px 5px calc(10px + env(safe-area-inset-bottom));
 
     &.blur {
       font-size: 0.85rem;
