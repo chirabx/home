@@ -122,7 +122,9 @@ onBeforeUnmount(() => {
   animation-delay: 0.5s;
   .container {
     width: 100%;
-    height: 100vh;
+    height: 100%;
+    min-height: 100vh;
+    min-height: 100dvh;
     margin: 0 auto;
     .all {
       width: 100%;
