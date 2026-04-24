@@ -1,7 +1,7 @@
 <template>
   <div :class="store.backgroundShow ? 'cover show' : 'cover'">
-    <!-- 视频标签替换原来的 img -->
     <video
+      v-if="bgType === '0'"
       v-show="store.imgLoadStatus"
       :src="bgUrl"
       class="bg"
@@ -9,12 +9,23 @@
       loop
       muted
       playsinline
-      @canplay="videoLoadComplete"
-      @error.once="imgLoadError"
+      @canplay="mediaLoadComplete"
+      @error.once="mediaLoadError"
       @animationend="imgAnimationEnd"
     ></video>
 
+    <img
+      v-else
+      v-show="store.imgLoadStatus"
+      :src="bgUrl"
+      class="bg"
+      @load="mediaLoadComplete"
+      @error.once="mediaLoadError"
+      @animationend="imgAnimationEnd"
+    />
+
     <div :class="store.backgroundShow ? 'gray hidden' : 'gray'" />
+
     <Transition name="fade" mode="out-in">
       <a
         v-if="store.backgroundShow && store.coverType != '3'"
@@ -36,6 +47,7 @@ import { ElMessage } from "element-plus";
 
 const store = mainStore();
 const bgUrl = ref(null);
+const bgType = ref("0"); // 新增：用于在本地追踪当前应该渲染视频还是图片
 const imgTimeout = ref(null);
 const emit = defineEmits(["loadComplete"]);
 
@@ -45,19 +57,22 @@ const bgRandom = Math.floor(Math.random() * 10 + 1);
 // 更换壁纸链接
 const changeBg = (type) => {
   if (type == 0) {
-    // 默认改为视频
-    bgUrl.value = `/images/wallpaper.mp4`;
-  } else if (type == 1) {
-    bgUrl.value = "https://api.dujin.org/bing/1920.php";
-  } else if (type == 2) {
-    bgUrl.value = "https://api.aixiaowai.cn/gqapi/gqapi.php";
-  } else if (type == 3) {
-    bgUrl.value = "https://api.aixiaowai.cn/api/api.php";
+    bgType.value = "0";
+    bgUrl.value = `/videos/background.mp4`;
+  } else {
+    bgType.value = "1"; // 只要不是0，就渲染 img 标签
+    if (type == 1) {
+      bgUrl.value = "https://api.dujin.org/bing/1920.php";
+    } else if (type == 2) {
+      bgUrl.value = "https://api.aixiaowai.cn/gqapi/gqapi.php";
+    } else if (type == 3) {
+      bgUrl.value = "https://api.aixiaowai.cn/api/api.php";
+    }
   }
 };
 
-// 视频加载完成
-const videoLoadComplete = () => {
+// 媒体（视频/图片）加载完成
+const mediaLoadComplete = () => {
   imgTimeout.value = setTimeout(() => {
     store.setImgLoadStatus(true);
   }, Math.floor(Math.random() * (600 - 300 + 1)) + 300);
@@ -65,22 +80,23 @@ const videoLoadComplete = () => {
 
 // 动画完成
 const imgAnimationEnd = () => {
-  console.log("视频加载且动画完成");
+  console.log("背景加载且动画完成");
   emit("loadComplete");
 };
 
 // 加载失败
-const imgLoadError = () => {
-  console.error("视频加载失败：", bgUrl.value);
+const mediaLoadError = () => {
+  console.error("背景加载失败：", bgUrl.value);
   ElMessage({
-    message: "视频加载失败，已临时切换回默认",
+    message: "背景加载失败，已临时切换回默认",
     icon: h(Error, {
       theme: "filled",
       fill: "#efefef",
     }),
   });
-  // 失败也默认播放视频
-  bgUrl.value = `/images/wallpaper.mp4`;
+  // 失败时，必须将标签状态切换回视频，再赋视频链接
+  bgType.value = "0";
+  bgUrl.value = `/videos/background.mp4`;
 };
 
 // 监听切换
@@ -101,6 +117,7 @@ onBeforeUnmount(() => {
 </script>
 
 <style lang="scss" scoped>
+/* CSS 样式无需修改，现有的 .bg 样式对 video 和 img 均完美适用 */
 .cover {
   position: absolute;
   top: 0;
